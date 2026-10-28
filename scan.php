@@ -1,10 +1,34 @@
+<?php
+// Menu awal (tanpa mode) dan scanner QR: scan.php?mode=invitation | scan.php?mode=idcard
+$MODES = [
+    'invitation' => [
+        'title'       => 'Scan Invitation',
+        'icon'        => 'fa-ticket',
+        'desc'        => 'Cek status unduh & kedatangan invitation',
+        'action'      => 'index.php',
+        'param'       => 'id',
+        'placeholder' => 'Atau ketik ID: ID1XR5V779',
+    ],
+    'idcard' => [
+        'title'       => 'Scan ID Card',
+        'icon'        => 'fa-id-card-o',
+        'desc'        => 'Lihat nama, perusahaan & last check (tanpa mencatat)',
+        'action'      => 'idcard.php',
+        'param'       => 'code',
+        'placeholder' => 'Atau ketik kode ID card',
+    ],
+];
+
+$mode = isset($_GET['mode'], $MODES[$_GET['mode']]) ? $_GET['mode'] : '';
+$m    = $mode !== '' ? $MODES[$mode] : null;
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Scan QR - EMS GIIAS MKS 2026</title>
+    <title><?= $m ? $m['title'] . ' - ' : '' ?>EMS GIIAS MKS 2026</title>
     <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -27,10 +51,29 @@
 
     <div class="content-wrapper">
         <section class="content scan-content">
+
+        <?php if (!$m): ?>
+            <!-- Menu pilihan jenis scan -->
+            <h4 class="menu-heading">Pilih jenis scan</h4>
+            <?php foreach ($MODES as $key => $item): ?>
+                <a href="scan.php?mode=<?= $key ?>" class="menu-card">
+                    <span class="menu-card-icon bg-red"><i class="fa <?= $item['icon'] ?>"></i></span>
+                    <span class="menu-card-text">
+                        <strong><?= $item['title'] ?></strong>
+                        <small><?= $item['desc'] ?></small>
+                    </span>
+                    <i class="fa fa-chevron-right menu-card-arrow"></i>
+                </a>
+            <?php endforeach; ?>
+
+        <?php else: ?>
             <div class="box box-danger">
                 <div class="box-header with-border">
-                    <i class="fa fa-camera"></i>
-                    <h3 class="box-title">Scan QR Invitation</h3>
+                    <i class="fa <?= $m['icon'] ?>"></i>
+                    <h3 class="box-title"><?= $m['title'] ?></h3>
+                    <div class="box-tools pull-right">
+                        <a href="scan.php" class="btn btn-box-tool scan-back"><i class="fa fa-th-large"></i> Menu</a>
+                    </div>
                 </div>
                 <div class="box-body">
                     <!-- Pilihan kamera yang terpasang di perangkat -->
@@ -62,9 +105,9 @@
                         <input type="file" id="qr-file" accept="image/*" capture="environment" hidden>
                     </label>
 
-                    <form action="index.php" method="get" class="scan-search">
+                    <form action="<?= $m['action'] ?>" method="get" class="scan-search">
                         <div class="input-group">
-                            <input type="text" name="id" class="form-control" placeholder="Atau ketik ID: ID1XR5V779" autocapitalize="characters" required>
+                            <input type="text" name="<?= $m['param'] ?>" class="form-control" placeholder="<?= $m['placeholder'] ?>" autocapitalize="characters" required>
                             <span class="input-group-btn">
                                 <button class="btn btn-danger" type="submit"><i class="fa fa-search"></i> Cek</button>
                             </span>
@@ -72,6 +115,8 @@
                     </form>
                 </div>
             </div>
+        <?php endif; ?>
+
         </section>
     </div>
 
@@ -80,9 +125,11 @@
     </footer>
 </div>
 
+<?php if ($m): ?>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 (function () {
+    var MODE = <?= json_encode($mode) ?>;
     var CAM_KEY = 'ems-scan-camera';
     var scanner = new Html5Qrcode('reader', { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false });
     var running = false, done = false;
@@ -106,27 +153,35 @@
         el.style.display = html ? 'block' : 'none';
     }
 
-    // Isi QR bisa berupa URL halaman ini, URL sevenems.com (…?id=XXX), atau ID saja
-    function extractId(text) {
+    // Isi QR bisa berupa URL (…?id= / ?code= / ?barcode=) atau kodenya saja
+    function extractCode(text) {
         text = (text || '').trim();
         try {
-            var id = new URL(text).searchParams.get('id');
-            if (id) return id.trim();
+            var params = new URL(text).searchParams;
+            var v = params.get('id') || params.get('code') || params.get('barcode');
+            if (v) return v.trim();
         } catch (e) { /* bukan URL */ }
-        return /^[A-Za-z0-9]{4,32}$/.test(text) ? text : null;
+        var pattern = MODE === 'invitation' ? /^[A-Za-z0-9]{4,32}$/ : /^[A-Za-z0-9._-]{3,64}$/;
+        return pattern.test(text) ? text : null;
+    }
+
+    function targetUrl(code) {
+        return MODE === 'invitation'
+            ? 'index.php?id=' + encodeURIComponent(code)
+            : 'idcard.php?code=' + encodeURIComponent(code);
     }
 
     function onDecoded(text) {
         if (done) return;
-        var id = extractId(text);
-        if (!id) {
+        var code = extractCode(text);
+        if (!code) {
             msg('warning', '<i class="fa fa-exclamation-triangle"></i> QR tidak dikenali: <code>' + esc(text) + '</code>');
             return;
         }
         done = true;
         if (navigator.vibrate) navigator.vibrate(150);
-        msg('success', '<i class="fa fa-check"></i> QR terbaca: <strong>' + esc(id) + '</strong>, membuka data…');
-        var go = function () { location.href = 'index.php?id=' + encodeURIComponent(id); };
+        msg('success', '<i class="fa fa-check"></i> QR terbaca: <strong>' + esc(code) + '</strong>, membuka data…');
+        var go = function () { location.href = targetUrl(code); };
         running ? scanner.stop().then(go, go) : go();
     }
 
@@ -162,7 +217,7 @@
     function cameraError(err) {
         setRunning(false);
         if (!window.isSecureContext) {
-            var https = 'https://' + location.host + location.pathname;
+            var https = 'https://' + location.host + location.pathname + location.search;
             msg('danger', '<i class="fa fa-lock"></i> Kamera hanya bisa dipakai lewat <strong>HTTPS</strong>. ' +
                 'Buka <a href="' + https + '">' + https + '</a> atau gunakan tombol <em>Ambil Foto</em> di bawah.');
         } else {
@@ -225,5 +280,6 @@
     }
 })();
 </script>
+<?php endif; ?>
 </body>
 </html>

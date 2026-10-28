@@ -16,6 +16,7 @@
         { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
     ],
     "shortcuts": [
-        { "name": "Scan QR", "url": "./scan.php?source=shortcut", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+        { "name": "Scan Invitation", "url": "./scan.php?mode=invitation", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+        { "name": "Scan ID Card", "url": "./scan.php?mode=idcard", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
     ]
 }

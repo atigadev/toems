@@ -1,5 +1,5 @@
 // Service worker PWA EMS Scan
-var VERSION = 'ems-scan-v1';
+var VERSION = 'ems-scan-v2';
 var STATIC_CACHE = VERSION + '-static';
 var DATA_CACHE = VERSION + '-data';
 
@@ -83,7 +83,7 @@ self.addEventListener('fetch', function (event) {
     var sameOrigin = url.origin === self.location.origin;
     var path = url.pathname;
 
-    if (sameOrigin && (/\/(index|api)\.php$/.test(path) || /\/$/.test(path))) {
+    if (sameOrigin && (/\/(index|idcard|api)\.php$/.test(path) || /\/$/.test(path))) {
         event.respondWith(networkFirst(request));
     } else if (sameOrigin && /\/qr\.php$/.test(path)) {
         return; // halaman admin, tidak di-cache

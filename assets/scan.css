@@ -54,6 +54,18 @@ body { background: #ecf0f5; }
 .cam-select-group { margin-bottom: 10px; }
 .cam-select-group .form-control { height: 40px; font-size: 15px; }
 
+/* Menu pilihan jenis scan */
+.menu-heading { color: #666; font-weight: 600; margin: 5px 2px 12px; }
+.menu-card { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 6px; border-left: 4px solid #dd4b39;
+    padding: 18px 15px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.12); color: #333; }
+.menu-card:hover, .menu-card:focus, .menu-card:active { color: #333; text-decoration: none; background: #fafafa; }
+.menu-card-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+.menu-card-text { flex: 1; min-width: 0; }
+.menu-card-text strong { display: block; font-size: 18px; }
+.menu-card-text small { color: #888; font-size: 13px; }
+.menu-card-arrow { color: #ccc; }
+.scan-back { font-size: 13px; }
+
 /* Banner install PWA */
 .pwa-install { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 1050; display: flex; align-items: center; gap: 10px;
     max-width: 540px; margin: 0 auto; background: #fff; border-top: 3px solid #dd4b39; border-radius: 6px; padding: 10px 12px; box-shadow: 0 4px 16px rgba(0,0,0,.25); }

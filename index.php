@@ -68,7 +68,7 @@ $terunduh   = $result['found'] && stripos($d['stsdown'], 'terunduh') !== false;
                 <h4><i class="fa fa-search"></i> Invitation Tidak Ditemukan</h4>
                 <p>ID <strong><?= e($id) ?></strong> tidak terdaftar di sistem EMS GIIAS MKS 2026.</p>
             </div>
-            <a href="scan.php" class="btn btn-danger btn-block btn-lg"><i class="fa fa-camera"></i> Scan Lagi</a>
+            <a href="scan.php?mode=invitation" class="btn btn-danger btn-block btn-lg"><i class="fa fa-camera"></i> Scan Lagi</a>
 
         <?php else: ?>
             <!-- Status utama -->
@@ -171,7 +171,7 @@ $terunduh   = $result['found'] && stripos($d['stsdown'], 'terunduh') !== false;
 
             <div class="scan-actions">
                 <a href="index.php?id=<?= e($id) ?>" class="btn btn-default btn-lg"><i class="fa fa-refresh"></i> Refresh</a>
-                <a href="scan.php" class="btn btn-danger btn-lg"><i class="fa fa-camera"></i> Scan Lagi</a>
+                <a href="scan.php?mode=invitation" class="btn btn-danger btn-lg"><i class="fa fa-camera"></i> Scan Lagi</a>
             </div>
             <p class="scan-updated text-muted">Data diperbarui <?= date('d/m/Y H:i:s', $result['fetched_at']) ?></p>
         <?php endif; ?>
