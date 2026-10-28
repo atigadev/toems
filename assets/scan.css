@@ -1,0 +1,73 @@
+/* Tambahan tampilan mobile di atas AdminLTE 2 skin-red */
+body { background: #ecf0f5; }
+.content-wrapper { min-height: 0 !important; }
+
+.scan-navbar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 15px; }
+.scan-navbar-logo { height: 32px; width: auto; background: #fff; border-radius: 50%; padding: 2px; }
+.scan-navbar-title { color: #fff; font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+
+.scan-content { max-width: 560px; margin: 0 auto; padding: 15px; }
+
+.scan-hero { border-radius: 6px; text-align: center; padding: 22px 15px 18px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
+.scan-hero-icon { font-size: 64px; display: block; margin-bottom: 6px; }
+.scan-hero-status { font-size: 26px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.scan-hero-sub { font-size: 15px; opacity: .9; margin-top: 2px; }
+
+.scan-id-box .box-body { padding: 14px 15px; }
+.scan-id-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.scan-id { font-family: Menlo, Consolas, monospace; font-size: 22px; font-weight: 700; letter-spacing: 1px; color: #333; }
+.scan-peruntukan { font-size: 16px; padding: 6px 12px; }
+.scan-chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+.scan-chip { background: #f4f4f4; border: 1px solid #ddd; border-radius: 14px; padding: 3px 10px; font-size: 13px; color: #555; }
+
+.box-header.bg-red .box-title, .box-header.bg-red .fa { color: #fff; }
+
+.scan-list { list-style: none; margin: 0; padding: 0; }
+.scan-list li { display: flex; align-items: flex-start; gap: 12px; padding: 11px 15px; border-bottom: 1px solid #f4f4f4; }
+.scan-list li:last-child { border-bottom: 0; }
+.scan-list li > .fa { width: 20px; text-align: center; color: #dd4b39; font-size: 17px; margin-top: 9px; }
+.scan-list li > div { flex: 1; min-width: 0; }
+.scan-label { display: block; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: .3px; }
+.scan-value { display: block; font-size: 16px; font-weight: 600; color: #333; }
+.scan-value .label { font-size: 13px; }
+.scan-break { word-break: break-word; }
+
+.scan-actions { display: flex; gap: 10px; margin-top: 5px; }
+.scan-actions .btn { flex: 1; }
+.scan-updated { text-align: center; font-size: 12px; margin: 12px 0 0; }
+
+.scan-search { margin: 15px 0 5px; }
+.scan-search .form-control { height: 42px; font-size: 16px; text-transform: uppercase; }
+.scan-search .btn { height: 42px; }
+
+.scan-footer { margin-left: 0 !important; font-size: 13px; }
+
+/* Scanner kamera */
+.cam-frame { position: relative; background: #222; border-radius: 6px; overflow: hidden; min-height: 280px; }
+#reader { width: 100%; }
+#reader video { width: 100% !important; display: block; }
+.cam-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bbb; text-align: center; padding: 20px; }
+.cam-placeholder .fa { font-size: 80px; color: #dd4b39; margin-bottom: 10px; }
+.cam-msg { margin: 12px 0 0; }
+.cam-msg a { text-decoration: underline; word-break: break-all; }
+.cam-file { margin-top: 10px; }
+.cam-select-group { margin-bottom: 10px; }
+.cam-select-group .form-control { height: 40px; font-size: 15px; }
+
+/* Banner install PWA */
+.pwa-install { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 1050; display: flex; align-items: center; gap: 10px;
+    max-width: 540px; margin: 0 auto; background: #fff; border-top: 3px solid #dd4b39; border-radius: 6px; padding: 10px 12px; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+.pwa-install img { width: 40px; height: 40px; border-radius: 8px; }
+.pwa-install-text { flex: 1; min-width: 0; line-height: 1.3; }
+.pwa-install-text strong { display: block; }
+.pwa-install-text span { font-size: 12px; color: #777; }
+.pwa-install-close { background: none; border: 0; font-size: 24px; line-height: 1; color: #999; padding: 0 4px; }
+
+/* QR generator */
+.qr-card { text-align: center; }
+.qr-card .qr-code { display: inline-block; padding: 10px; background: #fff; border: 1px solid #eee; }
+.qr-card .qr-url { font-size: 11px; word-break: break-all; color: #888; margin-top: 6px; }
+@media print {
+    .no-print, .main-header, .main-footer { display: none !important; }
+    .qr-card { page-break-inside: avoid; }
+}
