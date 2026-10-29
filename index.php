@@ -1,5 +1,6 @@
 <?php
 // Halaman hasil scan QR: index.php?id=ID1XR5V779
+require_once __DIR__ . '/inc/version.php';
 require __DIR__ . '/scraper.php';
 
 function e($s)
@@ -39,7 +40,7 @@ $terunduh   = $result['found'] && stripos($d['stsdown'], 'terunduh') !== false;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/AdminLTE.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/skins/skin-red.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700">
-    <link rel="stylesheet" href="assets/scan.css">
+    <link rel="stylesheet" href="<?= asset('assets/scan.css') ?>">
 <?php include __DIR__ . '/inc/pwa-head.php'; ?>
 </head>
 <body class="hold-transition skin-red layout-top-nav">
@@ -179,9 +180,7 @@ $terunduh   = $result['found'] && stripos($d['stsdown'], 'terunduh') !== false;
         </section>
     </div>
 
-    <footer class="main-footer text-center scan-footer">
-        <strong>Seven Event</strong> &ndash; PT. Amara Tujuh Perjuangan
-    </footer>
+<?php include __DIR__ . '/inc/footer.php'; ?>
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 // Generator QR: setiap QR mengarah ke index.php?id=XXXX
+require_once __DIR__ . '/inc/version.php';
 require __DIR__ . '/scraper.php';
 
 // Smartphone tidak bisa membuka "localhost", jadi pakai IP LAN komputer ini sebagai default
@@ -31,7 +32,7 @@ foreach (preg_split('/[\s,;]+/', $raw, -1, PREG_SPLIT_NO_EMPTY) as $id) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/AdminLTE.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/skins/skin-red.min.css">
-    <link rel="stylesheet" href="assets/scan.css">
+    <link rel="stylesheet" href="<?= asset('assets/scan.css') ?>">
 </head>
 <body class="hold-transition skin-red layout-top-nav">
 <div class="wrapper">
@@ -80,9 +81,7 @@ foreach (preg_split('/[\s,;]+/', $raw, -1, PREG_SPLIT_NO_EMPTY) as $id) {
         </section>
     </div>
 
-    <footer class="main-footer text-center scan-footer">
-        <strong>Seven Event</strong> &ndash; PT. Amara Tujuh Perjuangan
-    </footer>
+<?php include __DIR__ . '/inc/footer.php'; ?>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>

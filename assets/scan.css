@@ -73,14 +73,25 @@ body { background: #ecf0f5; }
 .menu-card-arrow { color: #ccc; }
 .scan-back { font-size: 13px; }
 
-/* Banner install PWA */
-.pwa-install { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 1050; display: flex; align-items: center; gap: 10px;
-    max-width: 540px; margin: 0 auto; background: #fff; border-top: 3px solid #dd4b39; border-radius: 6px; padding: 10px 12px; box-shadow: 0 4px 16px rgba(0,0,0,.25); }
-.pwa-install img { width: 40px; height: 40px; border-radius: 8px; }
-.pwa-install-text { flex: 1; min-width: 0; line-height: 1.3; }
-.pwa-install-text strong { display: block; }
-.pwa-install-text span { font-size: 12px; color: #777; }
-.pwa-install-close { background: none; border: 0; font-size: 24px; line-height: 1; color: #999; padding: 0 4px; }
+/* Banner PWA (install & update) */
+.pwa-bar { position: fixed; left: 10px; right: 10px; bottom: 10px; z-index: 1050; display: flex; align-items: center; gap: 10px;
+    max-width: 540px; margin: 0 auto; background: #fff; border-top: 3px solid #dd4b39; border-radius: 6px; padding: 10px 12px;
+    margin-bottom: env(safe-area-inset-bottom); box-shadow: 0 4px 16px rgba(0,0,0,.25); }
+.pwa-bar img { width: 40px; height: 40px; border-radius: 8px; }
+.pwa-bar-text { flex: 1; min-width: 0; line-height: 1.3; }
+.pwa-bar-text strong { display: block; }
+.pwa-bar-text span { font-size: 12px; color: #777; }
+.pwa-bar-close { background: none; border: 0; font-size: 24px; line-height: 1; color: #999; padding: 0 4px; }
+.pwa-update { border-top-color: #00a65a; z-index: 1060; }
+.pwa-bar-icon { font-size: 28px; color: #00a65a; width: 40px; text-align: center; }
+
+.pwa-toast { position: fixed; left: 50%; bottom: 80px; transform: translateX(-50%); z-index: 1070; background: rgba(0,0,0,.8); color: #fff;
+    padding: 8px 16px; border-radius: 18px; font-size: 14px; white-space: nowrap; }
+
+/* Versi aplikasi & cek update di footer */
+.app-version { margin-top: 4px; font-size: 12px; color: #999; }
+.app-update-check { background: none; border: 0; color: #dd4b39; padding: 0 0 0 6px; font-size: 12px; }
+.app-update-check[hidden] { display: none; }
 
 /* QR generator */
 .qr-card { text-align: center; }

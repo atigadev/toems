@@ -1,5 +1,6 @@
 <?php
 // Menu awal (tanpa mode) dan scanner QR: scan.php?mode=invitation | scan.php?mode=idcard
+require_once __DIR__ . '/inc/version.php';
 $MODES = [
     'invitation' => [
         'title'       => 'Scan Invitation',
@@ -35,7 +36,7 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/AdminLTE.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.4.18/css/skins/skin-red.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700">
-    <link rel="stylesheet" href="assets/scan.css">
+    <link rel="stylesheet" href="<?= asset('assets/scan.css') ?>">
 <?php include __DIR__ . '/inc/pwa-head.php'; ?>
 </head>
 <body class="hold-transition skin-red layout-top-nav">
@@ -120,9 +121,7 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
         </section>
     </div>
 
-    <footer class="main-footer text-center scan-footer">
-        <strong>Seven Event</strong> &ndash; PT. Amara Tujuh Perjuangan
-    </footer>
+<?php include __DIR__ . '/inc/footer.php'; ?>
 </div>
 
 <?php if ($m): ?>
