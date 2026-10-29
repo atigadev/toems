@@ -1,5 +1,5 @@
 // Service worker PWA EMS Scan
-var VERSION = 'ems-scan-v2';
+var VERSION = 'ems-scan-v5';
 var STATIC_CACHE = VERSION + '-static';
 var DATA_CACHE = VERSION + '-data';
 

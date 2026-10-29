@@ -102,7 +102,7 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
                     <!-- Cadangan: ambil foto QR (tetap jalan walau tanpa HTTPS) -->
                     <label class="btn btn-default btn-block btn-lg cam-file">
                         <i class="fa fa-picture-o"></i> Ambil Foto / Pilih Gambar QR
-                        <input type="file" id="qr-file" accept="image/*" capture="environment" hidden>
+                        <input type="file" id="qr-file" class="cam-file-input" accept="image/*" capture="environment">
                     </label>
 
                     <form action="<?= $m['action'] ?>" method="get" class="scan-search">

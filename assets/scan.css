@@ -1,6 +1,9 @@
 /* Tambahan tampilan mobile di atas AdminLTE 2 skin-red */
 body { background: #ecf0f5; }
-.content-wrapper { min-height: 0 !important; }
+/* Wrapper AdminLTE berlatar gelap (#222d32): isi penuh layar, konten mengembang, footer selalu di bawah */
+.wrapper { background: #ecf0f5; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.content-wrapper { min-height: 0 !important; flex: 1 0 auto; }
+.main-footer { padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
 
 .scan-navbar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px 15px; }
 .scan-navbar-logo { height: 32px; width: auto; background: #fff; border-radius: 50%; padding: 2px; }
@@ -14,9 +17,11 @@ body { background: #ecf0f5; }
 .scan-hero-sub { font-size: 15px; opacity: .9; margin-top: 2px; }
 
 .scan-id-box .box-body { padding: 14px 15px; }
-.scan-id-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.scan-id-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; }
+.scan-id-row > div { min-width: 0; }
 .scan-id { font-family: Menlo, Consolas, monospace; font-size: 22px; font-weight: 700; letter-spacing: 1px; color: #333; }
-.scan-peruntukan { font-size: 16px; padding: 6px 12px; }
+/* Peruntukan bisa panjang (mis. "SUMMARECON MUTIARA MAKASSAR"): boleh turun baris, tidak keluar kartu */
+.scan-peruntukan { font-size: 15px; padding: 6px 12px; max-width: 100%; white-space: normal; word-break: break-word; text-align: left; line-height: 1.3; }
 .scan-chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
 .scan-chip { background: #f4f4f4; border: 1px solid #ddd; border-radius: 14px; padding: 3px 10px; font-size: 13px; color: #555; }
 
@@ -50,7 +55,9 @@ body { background: #ecf0f5; }
 .cam-placeholder .fa { font-size: 80px; color: #dd4b39; margin-bottom: 10px; }
 .cam-msg { margin: 12px 0 0; }
 .cam-msg a { text-decoration: underline; word-break: break-all; }
-.cam-file { margin-top: 10px; }
+.cam-file { margin-top: 10px; position: relative; overflow: hidden; }
+/* Input file disembunyikan secara visual (bukan display:none) agar tetap bisa dibuka lewat label di iOS */
+.cam-file-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; pointer-events: none; }
 .cam-select-group { margin-bottom: 10px; }
 .cam-select-group .form-control { height: 40px; font-size: 15px; }
 
