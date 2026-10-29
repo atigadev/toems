@@ -116,8 +116,8 @@ self.addEventListener('fetch', function (event) {
 
     if (sameOrigin && (/\/(index|idcard|api)\.php$/.test(path) || /\/$/.test(path))) {
         event.respondWith(networkFirst(request));
-    } else if (sameOrigin && /\/(qr|sw)\.php$/.test(path)) {
-        return; // halaman admin & service worker sendiri tidak di-cache
+    } else if (sameOrigin && /\/(qr|sw|admin|history_image|history_save)\.php$/.test(path)) {
+        return; // halaman admin, gambar history & service worker sendiri tidak di-cache
     } else {
         event.respondWith(staleWhileRevalidate(request));
     }

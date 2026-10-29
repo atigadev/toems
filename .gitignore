@@ -1,2 +1,6 @@
 # Cache hasil scrape (data invitation)
 cache/
+
+# History scan (gambar + database) & password admin: data pribadi, jangan di-commit
+storage/*
+!storage/.htaccess

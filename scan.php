@@ -170,7 +170,60 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
             : 'idcard.php?code=' + encodeURIComponent(code);
     }
 
-    function onDecoded(text) {
+    // ---------------------------------------------------- History gambar scan
+
+    var HISTORY_MAX_SIDE = 1280, HISTORY_TIMEOUT = 6000;
+
+    // Gambar sumber (video/img) -> JPEG Blob, sisi terpanjang <= HISTORY_MAX_SIDE
+    function toJpeg(source, w, h) {
+        return new Promise(function (resolve) {
+            if (!w || !h) return resolve(null);
+            var scale = Math.min(1, HISTORY_MAX_SIDE / Math.max(w, h));
+            var canvas = document.createElement('canvas');
+            canvas.width = Math.round(w * scale);
+            canvas.height = Math.round(h * scale);
+            canvas.getContext('2d').drawImage(source, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob(function (blob) { resolve(blob); }, 'image/jpeg', 0.8);
+        });
+    }
+
+    // Ambil frame kamera saat QR terbaca (harus sebelum kamera dihentikan)
+    function captureFrame() {
+        var video = document.querySelector('#reader video');
+        return video ? toJpeg(video, video.videoWidth, video.videoHeight) : Promise.resolve(null);
+    }
+
+    function fileToJpeg(file) {
+        return new Promise(function (resolve) {
+            var url = URL.createObjectURL(file);
+            var img = new Image();
+            img.onload = function () {
+                toJpeg(img, img.naturalWidth, img.naturalHeight).then(function (blob) {
+                    URL.revokeObjectURL(url);
+                    resolve(blob);
+                });
+            };
+            img.onerror = function () { URL.revokeObjectURL(url); resolve(null); };
+            img.src = url;
+        });
+    }
+
+    // Kirim ke history; gagal/lama tidak boleh menghalangi pembukaan hasil scan
+    function saveHistory(code, raw, source, blob) {
+        if (!blob) return Promise.resolve();
+        var fd = new FormData();
+        fd.append('mode', MODE);
+        fd.append('code', code);
+        fd.append('raw', raw);
+        fd.append('source', source);
+        fd.append('image', blob, 'scan.jpg');
+        var upload = fetch('history_save.php', { method: 'POST', body: fd }).catch(function () {});
+        var timeout = new Promise(function (resolve) { setTimeout(resolve, HISTORY_TIMEOUT); });
+        return Promise.race([upload, timeout]);
+    }
+
+    // source: 'camera' | 'file'; file: berkas foto bila source = 'file'
+    function onDecoded(text, source, file) {
         if (done) return;
         var code = extractCode(text);
         if (!code) {
@@ -179,9 +232,15 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
         }
         done = true;
         if (navigator.vibrate) navigator.vibrate(150);
-        msg('success', '<i class="fa fa-check"></i> QR terbaca: <strong>' + esc(code) + '</strong>, membuka data…');
-        var go = function () { location.href = targetUrl(code); };
-        running ? scanner.stop().then(go, go) : go();
+        msg('success', '<i class="fa fa-check"></i> QR terbaca: <strong>' + esc(code) + '</strong>, menyimpan &amp; membuka data…');
+
+        var image = source === 'file' ? fileToJpeg(file) : captureFrame();
+        image.then(function (blob) {
+            var stop = running ? scanner.stop().catch(function () {}) : Promise.resolve();
+            return Promise.all([stop, saveHistory(code, text, source, blob)]);
+        }).then(function () {
+            location.href = targetUrl(code);
+        });
     }
 
     function setRunning(state) {
@@ -232,7 +291,7 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
             fps: 10,
             qrbox: function (w, h) { var s = Math.floor(Math.min(w, h) * 0.7); return { width: s, height: s }; }
         };
-        return scanner.start(cam, config, onDecoded, function () { /* belum ada QR di frame */ })
+        return scanner.start(cam, config, function (text) { onDecoded(text, 'camera'); }, function () { /* belum ada QR di frame */ })
             .then(function () { setRunning(true); })
             .catch(cameraError);
     }
@@ -265,7 +324,9 @@ $m    = $mode !== '' ? $MODES[$mode] : null;
         if (!file) return;
         stopCamera().then(function () {
             return scanner.scanFile(file, false);
-        }).then(onDecoded).catch(function () {
+        }).then(function (text) {
+            onDecoded(text, 'file', file);
+        }).catch(function () {
             msg('warning', '<i class="fa fa-exclamation-triangle"></i> QR tidak ditemukan di gambar. Coba foto lebih dekat dan jelas.');
         });
         e.target.value = '';
