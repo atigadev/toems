@@ -35,7 +35,9 @@ $action = isset($_POST['action']) ? $_POST['action'] : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_valid()) {
-        $error = 'Sesi kedaluwarsa, silakan coba lagi.';
+        $error = isset($_COOKIE[session_name()])
+            ? 'Sesi kedaluwarsa, silakan coba lagi.'
+            : 'Cookie sesi tidak diterima server. Pastikan cookie tidak diblokir browser, lalu muat ulang halaman ini.';
     } elseif ($action === 'setup' && !admin_is_setup()) {
         $pw = isset($_POST['password']) ? (string) $_POST['password'] : '';
         $pw2 = isset($_POST['password2']) ? (string) $_POST['password2'] : '';

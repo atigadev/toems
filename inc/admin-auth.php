@@ -7,14 +7,37 @@ require_once __DIR__ . '/history.php';
 
 define('ADMIN_FILE', STORAGE_DIR . '/admin.json');
 
+// Path cookie = folder aplikasi. dirname('/admin.php') menghasilkan '/' (atau '\' di Windows),
+// jadi tanpa rtrim path menjadi '//' dan cookie tidak pernah dikirim balik oleh browser.
+function admin_cookie_path()
+{
+    return rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'])), '/') . '/';
+}
+
+function is_https()
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https');
+}
+
 function admin_session_start()
 {
     if (session_status() === PHP_SESSION_NONE) {
+        // Folder sesi bawaan hosting kadang tidak bisa ditulis: pakai storage/sessions
+        $savePath = session_save_path();
+        if ($savePath === '' || !is_dir($savePath) || !is_writable($savePath)) {
+            $savePath = STORAGE_DIR . '/sessions';
+            if (!is_dir($savePath)) {
+                @mkdir($savePath, 0700, true);
+            }
+            session_save_path($savePath);
+        }
+
         session_name('TOEMSADMIN');
         session_set_cookie_params([
             'lifetime' => 0,
-            'path'     => dirname($_SERVER['SCRIPT_NAME']) . '/',
-            'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+            'path'     => admin_cookie_path(),
+            'secure'   => is_https(),
             'httponly' => true,
             'samesite' => 'Lax',
         ]);
